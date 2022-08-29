@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-
+ 
   // Use buttons to toggle between views
   document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // By default, load the inbox
   load_mailbox('inbox');
+
 });
 
 function compose_email() {
@@ -20,6 +21,33 @@ function compose_email() {
   document.querySelector('#compose-recipients').value = '';
   document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
+
+  //Send mail
+  document.querySelector('#compose-form').addEventListener('submit',async function(event){
+    event.preventDefault()
+
+    let composeRecipient = document.querySelector('#compose-recipients').value;
+    let composeSubject = document.querySelector('#compose-subject').value;
+    let composeBody = document.querySelector('#compose-body').value;
+
+    if(composeRecipient && composeSubject && composeBody) {
+      try {
+        const compose_email = await fetch('/emails', {
+            method: 'POST',
+            body: JSON.stringify({
+              recipients: composeRecipient,
+              subject: composeSubject,
+              body: composeBody
+            })
+          })
+        const data = await compose_email.json()
+        data && console.log(data.message)
+        data.message === 'Email sent successfully.' ? load_mailbox('sent') : alert(data.error)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  })
 }
 
 function load_mailbox(mailbox) {
