@@ -69,13 +69,18 @@ async function load_mailbox(mailbox) {
     let div = document.createElement('div')
     div.classList.add(`box-${mailbox}`)
     let ul =  document.createElement('ul')
-
+   
     for(let email in emails) {
-      let li = document.createElement('li')
-      li.classList.add(`list-${mailbox}-item`)
+      console.log(emails[email]['recipients'].length);
+      let li = document.createElement('li');
+      li.classList.add(`list-item`,`${emails[email]['read']?'bg-unread':'lol'}`) 
       li.innerHTML = `
         <div class="main-box-mail">
-          <p>Sender: <strong>${emails[email]['sender']}</strong></p>
+          <p>${mailbox == 'inbox'?'Sender: ': 'To: '}
+            <strong>
+            ${mailbox == 'inbox'? emails[email]['sender']: (emails[email]['recipients'].length == 1 ? emails[email]['recipients'][0]:emails[email]['recipients'][0] +',...')}
+            </strong>
+          </p>
           <p>Subject: <strong>${emails[email]['subject']}</strong></p>
         </div>
         <p>Date: <strong>${emails[email]['timestamp']}</strong></p>

@@ -13,18 +13,21 @@ li {
 textarea {
     min-height: 400px;
 }
-.list-inbox-item {
+.bg-unread {
+    background-color: gray;
+}
+.list-item {
     display: flex;
     border: 1px solid #dfdfdf;
     justify-content: space-between;
     flex-wrap: wrap;
     padding: 1.6rem;
 }
-.list-inbox-item p {
+.list-item p {
     margin: 0;
     display: flex;
     align-items: center;
 }
-.list-inbox-item strong {
+.list-item strong {
     padding-left: .4rem;
 }
