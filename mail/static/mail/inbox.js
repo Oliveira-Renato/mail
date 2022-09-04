@@ -50,7 +50,8 @@ function compose_email() {
   })
 }
 
-function load_mailbox(mailbox) {
+
+async function load_mailbox(mailbox) {
   
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
@@ -58,4 +59,31 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+  const email= await fetch(`/emails/${mailbox}`);
+  const result = await email.json();
+  result && console.log(result);
+  if(result){ 
+    const body = document.querySelector('#emails-view')
+    const emails = result.sort()
+    let div = document.createElement('div')
+    div.classList.add(`box-${mailbox}`)
+    let ul =  document.createElement('ul')
+
+    for(let email in emails) {
+      let li = document.createElement('li')
+      li.classList.add(`list-${mailbox}-item`)
+      li.innerHTML = `
+        <div class="main-box-mail">
+          <p>Sender: <strong>${emails[email]['sender']}</strong></p>
+          <p>Subject: <strong>${emails[email]['subject']}</strong></p>
+        </div>
+        <p>Date: <strong>${emails[email]['timestamp']}</strong></p>
+      `
+      ul.append(li)
+    }
+    div.append(ul)
+    body.append(div)
+
+  }
 }

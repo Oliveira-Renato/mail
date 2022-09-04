@@ -1,3 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html {
+    font-size: 62.5%;
+    font:400 1rem 'Roboto', sans-serif;
+}
+li {
+    list-style: none;
+}
 textarea {
     min-height: 400px;
+}
+.list-inbox-item {
+    display: flex;
+    border: 1px solid #dfdfdf;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 1.6rem;
+}
+.list-inbox-item p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+.list-inbox-item strong {
+    padding-left: .4rem;
 }
