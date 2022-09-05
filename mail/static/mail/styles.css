@@ -22,6 +22,7 @@ textarea {
     justify-content: space-between;
     flex-wrap: wrap;
     padding: 1.6rem;
+    cursor: pointer;
 }
 .list-item p {
     margin: 0;
