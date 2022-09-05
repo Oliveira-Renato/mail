@@ -29,13 +29,20 @@ async function handleMailView(pMailID){
         let div = document.createElement('div')
         div.classList.add('mail-content')
         div.innerHTML = `
-        <h2>${result['subject']}</h2>
-        <p>Sender: <strong>${result['sender']}</strong></p>
-        <div class="time-mail">${result['timestamp']}<p>
-        <div class="mail-body">
-          <p>${result['body']}</p>
+        <div>
+          <header>
+          <div>
+            <h2>${result['subject']}</h2>
+              <p>Sender: <strong>${result['sender']}</strong></p>
+              <span>to me</span>
+            </div>
+            <div class="time-mail">${result['timestamp']}</div>
+          </header>
+          <main class="mail-body">
+            <p>${result['body']}</p>
+          </main>
+          <button>Reply</button>
         </div>
-        <button>Reply</button>
         `
         mailBox.append(div)
       }

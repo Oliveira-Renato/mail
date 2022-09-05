@@ -10,6 +10,9 @@ html {
 li {
     list-style: none;
 }
+p {
+    margin: 0;
+}
 textarea {
     min-height: 400px;
 }
@@ -31,4 +34,30 @@ textarea {
 }
 .list-item strong {
     padding-left: .4rem;
+}
+
+/*=== MAIL CONTENT VIEW =====*/
+.mail-content {
+    margin: 1.6rem 1rem;
+}
+.mail-content header {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 1.6rem;
+}
+.mail-content header h2{
+    margin-bottom: 1.6rem;
+}
+.mail-content header span{
+   font-size: .8rem;
+}
+.mail-content header .time-mail {
+    display: flex;
+    align-items: end;
+    padding-bottom: 22px;
+    font-size: .9rem;
+}
+.mail-content main {
+    margin-bottom: 1.6rem;
 }
