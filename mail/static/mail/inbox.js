@@ -1,5 +1,7 @@
+let v_control = 0
+
 document.addEventListener('DOMContentLoaded', function() {
- 
+  
   // Use buttons to toggle between views
   document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
@@ -11,8 +13,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
+async function handleUpdateData(pId, pRead, pArchive) {
+  let v_id = pId,
+      v_read = pRead || true,
+      v_archive = pArchive || false;
+      console.log(pId,pRead,pArchive)
+
+  if(v_id){
+    try {
+      const mailRead = await fetch(`/emails/${v_id}`,{
+        method: 'PUT',
+        body: JSON.stringify({
+          archived: v_archive,
+          read: v_read
+        })
+      }),
+      mailReadRes = await mailRead;
+      if(mailReadRes.ok) load_mailbox('inbox');
+
+    } catch (error) {
+      console.log('Error update mail data : ', error)
+    }
+  }
+}
+
 async function handleMailView(pMailID){
   if(pMailID){
+    //Cleaning contents
     document.querySelector('#content-mail').innerHTML=''
     try {
       const mailID = await fetch(`/emails/${pMailID}`);
@@ -25,30 +52,39 @@ async function handleMailView(pMailID){
         document.querySelector('#compose-view').style.display ='none';
         document.querySelector('#content-mail').style.display ='block';
 
-        let mailBox = document.querySelector('#content-mail');
         let div = document.createElement('div')
         div.classList.add('mail-content')
         div.innerHTML = `
         <div>
           <header>
-          <div>
-            <h2>${result['subject']}</h2>
-              <p>Sender: <strong>${result['sender']}</strong></p>
-              <span>to me</span>
+            <div>
+              <h2>${result['subject']}</h2>
+                <p>Sender: <strong>${result['sender']}</strong></p>
+                <span>to me</span>
             </div>
             <div class="time-mail">${result['timestamp']}</div>
           </header>
           <main class="mail-body">
+            <div id="archive" style="display:${v_control ? 'none':''}">
+              <iconify-icon icon="fluent:archive-arrow-back-20-regular" flip="horizontal"></iconify-icon>
+            </div>
             <p>${result['body']}</p>
           </main>
           <button>Reply</button>
         </div>
         `
-        mailBox.append(div)
+        document.querySelector('#content-mail').append(div);
+        //Setting read as true
+        if(result['read'] == false) handleUpdateData(pMailID,true,'');
+
+        document.querySelector('#archive iconify-icon').addEventListener('click', function(){
+          console.log('aaaaa',result['archived'])
+          handleUpdateData(pMailID,'', !result['archived'] ? true : '');
+        }) 
       }
       
     } catch (error) {
-      
+      console.log(error)
     }
   }
 }
@@ -99,6 +135,9 @@ async function load_mailbox(mailbox) {
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
   document.querySelector('#content-mail').style.display ='none';
+
+  // Change value to control archive icon
+  mailbox == 'sent' ? v_control = 1 : v_control = 0;
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
